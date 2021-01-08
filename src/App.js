@@ -1,6 +1,10 @@
 import React from 'react';
 import './App.css';
 
+// Redux
+import { connect } from 'react-redux';
+import { setCurrentUser } from './redux/user/user-actions';
+
 import { Switch, Route } from "react-router-dom";
 import { auth, createUserProfileDocument } from './firebase/firebase-util';
 import HomePage from './pages/HomePage/HomePage-component';
@@ -10,32 +14,33 @@ import Header from './components/Header/Header-component';
 // import { render } from '@testing-library/react';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  // constructor no longer required with redux
+  // constructor() {
+  //   super();
 
-    this.state = {
-      currentUser: null
-    }
-  }
+  //   this.state = {
+  //     currentUser: null
+  //   }
+  // }
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // this.setState({ currentUser : user });
       if(userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapShot => {
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data()
-            }
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
           })
         });
       } else {
-        this.setState({currentUser: userAuth});
+        setCurrentUser(userAuth);
       }
     })
   }
@@ -53,7 +58,7 @@ class App extends React.Component {
           <Route path='/hats' component={HatsPage}>
         */}
 
-        <Header currentUser={this.state.currentUser} />
+        <Header />
 
         {/* //Example of only rendering matched path once */}
         <Switch>
@@ -65,4 +70,8 @@ class App extends React.Component {
   );}
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(null, mapDispatchToProps)(App);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/firebase-util';
 // Below is method to import svg in React
@@ -27,4 +28,9 @@ const Header = ({ currentUser }) => (
    </div>
 )
 
-export default Header;
+// state = rootReducer, currentUser: <= is what's passed in to the component
+const mapStateToProps = state => ({
+   currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(Header);
