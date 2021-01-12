@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user-actions';
 import { createStructuredSelector } from 'reselect'
 import { selectCurrentUser } from './redux/user/user-selectors';
+
+// Other Utilities
 import { Switch, Route, Redirect } from "react-router-dom";
 import { auth, createUserProfileDocument } from './firebase/firebase-util';
 import HomePage from './pages/HomePage/HomePage-component';
@@ -16,14 +18,6 @@ import Header from './components/Header/Header-component';
 // import { render } from '@testing-library/react';
 
 class App extends React.Component {
-  // constructor no longer required with redux
-  // constructor() {
-  //   super();
-
-  //   this.state = {
-  //     currentUser: null
-  //   }
-  // }
 
   unsubscribeFromAuth = null;
 
@@ -54,15 +48,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {/* 
-          // example for rendering all 
-          <Route exact path='/' component={HomePage} /> 
-          <Route path='/hats' component={HatsPage}>
-        */}
-
         <Header />
-
-        {/* //Example of only rendering matched path once */}
         <Switch>
             <Route exact path='/' component={HomePage} /> 
             <Route path='/shop' component={ShopPage} />
@@ -75,10 +61,6 @@ class App extends React.Component {
       </div>
   );}
 }
-
-// const mapStateToProps = ({ user }) => ({
-//   currentUser: user.currentUser
-// })
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
