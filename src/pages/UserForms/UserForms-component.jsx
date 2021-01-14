@@ -1,13 +1,13 @@
 import React from 'react';
 import SignIn from '../../components/SignIn/SignIn-component';
 import SignUp from '../../components/SignUp/SignUp-component';
-import './UserForms-style.scss';
+import { UserformContainer } from './UserForms-styled';
 
 const UserForms = () => (
-   <div className="user-form">
+   <UserformContainer>
       <SignIn />
       <SignUp />
-   </div>
+   </UserformContainer>
 )
 
 export default UserForms;
