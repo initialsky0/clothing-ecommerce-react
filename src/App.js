@@ -18,7 +18,7 @@ import Header from './components/Header/Header-component';
 // import { render } from '@testing-library/react';
 
 class App extends React.Component {
-
+  // Observer pattern, listening to live streams of data
   unsubscribeFromAuth = null;
 
   componentDidMount() {
