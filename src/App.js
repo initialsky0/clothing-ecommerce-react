@@ -37,6 +37,8 @@ class App extends React.Component {
         });
       } else {
         setCurrentUser(userAuth);
+        // Below code was used to add collection data to firebase database
+        // addCollectionAndDocs('collections', collectionsArray.map(({title, items}) => ({title, items})));
       }
     })
   }
@@ -63,7 +65,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  // collectionsArray: selectCollectionsPreview
 })
 
 const mapDispatchToProps = dispatch => ({
