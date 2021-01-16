@@ -1,5 +1,5 @@
 import ShopActionTypes from './shop-types';
-import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase-util';
+// import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase-util';
 
 export const fetchCollectionsStart = () => ({
    type: ShopActionTypes.FETCH_COLLECTIONS_START,
@@ -15,16 +15,18 @@ export const fetchCollectionsFailed = errorMessage => ({
    payload: errorMessage
 });
 
-export const fetchCollectionsStartAsync = () => dispatch => {
-   const collectionRef = firestore.collection('collections');
+// Async fetchcollection code used with redux-thunk
 
-   // dispatch is only available when redux-thunk library is included
-   dispatch(fetchCollectionsStart());
+// export const fetchCollectionsStartAsync = () => dispatch => {
+//    const collectionRef = firestore.collection('collections');
 
-   // Promise pattern, have to call everytime to update data
-   collectionRef.get().then(snapshot => {
-      const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-      dispatch(fetchCollectionsSuccess(collectionsMap));
-   }).catch(err => dispatch(fetchCollectionsFailed(err.message)));
-}
+//    // dispatch is only available when redux-thunk library is included
+//    dispatch(fetchCollectionsStart());
+
+//    // Promise pattern, have to call everytime to update data
+//    collectionRef.get().then(snapshot => {
+//       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+//       dispatch(fetchCollectionsSuccess(collectionsMap));
+//    }).catch(err => dispatch(fetchCollectionsFailed(err.message)));
+// }
 

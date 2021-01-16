@@ -1,7 +1,8 @@
 import React from 'react';
 import FormInput from '../FormInput/FormInput-component';
 import CustomBtn from '../CustomBtn/CustomBtn-component';
-import { auth, signInWithGoogle } from '../../firebase/firebase-util';
+import { connect } from 'react-redux';
+import { googleSignInStart, emailSignInStart } from '../../redux/user/user-actions';
 import { SignInContainer, SignInBtnsContainer } from './SignIn-styled';
 
 class SignIn extends React.Component {
@@ -17,12 +18,8 @@ class SignIn extends React.Component {
    handleSubmit = async event => {
       event.preventDefault();
       const { email, password } = this.state;
-      try {
-         await auth.signInWithEmailAndPassword(email, password);
-         this.setState({email: '', password: ''});
-      } catch (error) {
-         console.error(error)
-      }
+      const { signInWithEmail } = this.props;
+      signInWithEmail(email, password);
    }
 
    handleOnChange = event => {
@@ -55,7 +52,7 @@ class SignIn extends React.Component {
                />
                <SignInBtnsContainer>
                   <CustomBtn type="submit"> Sign In </CustomBtn>
-                  <CustomBtn type='button' onClick={signInWithGoogle} isGoogleSignIn={true}> Sign in with Google </CustomBtn>
+                  <CustomBtn type='button' onClick={this.props.signInWithGoogle} isGoogleSignIn={true}> Sign in with Google </CustomBtn>
                </SignInBtnsContainer>
             </form>
          </SignInContainer>
@@ -63,4 +60,9 @@ class SignIn extends React.Component {
    }
 }
 
-export default SignIn
+const mapDispatchToProps = dispatch => ({
+   signInWithGoogle: () => dispatch(googleSignInStart()),
+   signInWithEmail: (email, password) => dispatch(emailSignInStart({ email, password }))
+})
+
+export default connect(null, mapDispatchToProps)(SignIn);

@@ -3,13 +3,13 @@ import CollectionOverviewContainer from '../../components/CollectionOverview/Col
 import CollectionPageContainer from '../Collection/Collection-container';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchCollectionsStartAsync } from '../../redux/shop/shop-actions';
+import { fetchCollectionsStart } from '../../redux/shop/shop-actions';
 
 
 class ShopPage extends React.Component {
    componentDidMount() {
-      const { fetchCollectionsStartAsync } = this.props;
-      fetchCollectionsStartAsync();
+      const { fetchCollectionsStart } = this.props;
+      fetchCollectionsStart();
    };
 
    // fetch method, change YOUR_PROJECT_ID to actual project ID
@@ -36,7 +36,7 @@ class ShopPage extends React.Component {
 };
 
 const mapDispatchToProps = dispatch => ({
-   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+   fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 });
 
 export default connect(null, mapDispatchToProps)(ShopPage);
