@@ -14,7 +14,30 @@ export const signInSuccess = user => ({
    payload: user
 });
 
-export const signInFailed = error => ({
-   type: userActionTypes.SIGNIN_FAILED,
+export const actionFailed = error => ({
+   type: userActionTypes.ACTION_FAILED,
    payload: error
+});
+
+export const signOutStart = () => ({
+   type: userActionTypes.SIGNOUT_START
+});
+
+export const signOutSuccess = () => ({
+   type: userActionTypes.SIGNOUT_SUCCESS
+});
+
+// signUpCredential requires { displayName, email, password }
+export const signUpStart = (signUpCredential) => ({
+   type: userActionTypes.SIGNUP_START,
+   payload: signUpCredential
+});
+
+export const signUpSuccess = (user, additionalData) => ({
+   type: userActionTypes.SIGNUP_SUCCESS,
+   payload: {user, additionalData}
+});
+
+export const checkUserSession = () => ({
+   type: userActionTypes.CHECK_USER_SESSION
 });

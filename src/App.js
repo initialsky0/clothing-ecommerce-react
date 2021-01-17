@@ -5,6 +5,7 @@ import './App.css';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect'
 import { selectCurrentUser } from './redux/user/user-selectors';
+import { checkUserSession } from './redux/user/user-actions';
 
 // Other Utilities
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -20,29 +21,12 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-  //   const { setCurrentUser } = this.props;
-
-  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-  //     // this.setState({ currentUser : user });
-  //     if(userAuth) {
-  //       const userRef = await createUserProfileDocument(userAuth);
-
-  //       userRef.onSnapshot(snapShot => {
-  //         setCurrentUser({
-  //           id: snapShot.id,
-  //           ...snapShot.data()
-  //         })
-  //       });
-  //     } else {
-  //       setCurrentUser(userAuth);
-  //       // Below code was used to add collection data to firebase database
-  //       // addCollectionAndDocs('collections', collectionsArray.map(({title, items}) => ({title, items})));
-  //     }
-  //   })
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();
+    // this.unsubscribeFromAuth();
   }
 
   render() {
@@ -64,7 +48,10 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  // collectionsArray: selectCollectionsPreview
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

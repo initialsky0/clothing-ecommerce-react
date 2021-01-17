@@ -33,7 +33,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         ...additionalData
       })
     } catch (error) {
-      console.log('error creating user', error.message);
+      return console.error(error);
     }
   }
 
@@ -73,6 +73,16 @@ export const convertCollectionsSnapshotToMap = collections => {
     return acc;
   }, {});
 };
+
+export const getCurrentUser = () => {
+  // Mimic promise based authentication
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+        unsubscribe();
+        resolve(userAuth);
+    }, reject);
+  });
+}
 
 /* ------------------------------------SETUP---------------------------------------- */
 
