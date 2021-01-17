@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 
 // Redux
@@ -16,35 +16,25 @@ import CheckoutPage from './pages/Checkout/Checkout-component';
 import Header from './components/Header/Header-component';
 // import { render } from '@testing-library/react';
 
-class App extends React.Component {
-  // Observer pattern, listening to live streams of data
-  unsubscribeFromAuth = null;
+const App = ({ checkUserSession, currentUser }) => {
 
-  componentDidMount() {
-    const { checkUserSession } = this.props;
-    checkUserSession();
-  }
+  useEffect(checkUserSession, [checkUserSession]);
 
-  componentWillUnmount() {
-    // this.unsubscribeFromAuth();
-  }
-
-  render() {
-    return (
-      <div>
-        <Header />
-        <Switch>
-            <Route exact path='/' component={HomePage} /> 
-            <Route path='/shop' component={ShopPage} />
-            <Route exact path='/checkout' component={CheckoutPage}/>
-            <Route exact path='/signin' 
-              render={() => this.props.currentUser ? 
-                (<Redirect to='/' />) : 
-                  (<UserForms />)} />
-        </Switch>
-      </div>
-  );}
-}
+  return (
+    <div>
+      <Header />
+      <Switch>
+          <Route exact path='/' component={HomePage} /> 
+          <Route path='/shop' component={ShopPage} />
+          <Route exact path='/checkout' component={CheckoutPage}/>
+          <Route exact path='/signin' 
+            render={() => currentUser ? 
+              (<Redirect to='/' />) : 
+                (<UserForms />)} />
+      </Switch>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,

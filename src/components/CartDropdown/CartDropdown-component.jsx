@@ -25,7 +25,7 @@ const CartDropdown = ({ cartItems, toggleCartHidden, history }) => {
       }
       document.addEventListener('mousedown', closeDropdown);
 
-      return (() => document.removeEventListener('mousedown', closeDropdown));
+      return () => document.removeEventListener('mousedown', closeDropdown);
    }, [toggleCartHidden]);
 
    return (
