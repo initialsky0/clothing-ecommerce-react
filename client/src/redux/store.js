@@ -9,6 +9,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middlewares = [sagaMiddleware];
 
+// Only run during development
 if(process.env.NODE_ENV === 'development') {
    middlewares.push(logger);
 }
