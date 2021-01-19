@@ -12,7 +12,7 @@ export const updateCartItem = (cartItems, cartItemToAdd) => {
    }
 
    return [...cartItems, {...cartItemToAdd, quantity: 1}];
-}
+};
 
 export const removeCartItem = (cartItems, cartItemToRemove) => {
    const existingCartItem = cartItems.find(
@@ -27,4 +27,18 @@ export const removeCartItem = (cartItems, cartItemToRemove) => {
          : item
       );
    }
-}
+};
+
+export const filterItemFromCart = (cartItems, item) => cartItems.filter(
+   cartItem => cartItem.id !== item.id
+);
+
+export const calcCartTotal = cartItems => cartItems.reduce(
+   (acc, item) => (acc + (item.quantity * item.price)), 
+   0
+);
+
+export const trackItemCount = cartItems => cartItems.reduce(
+   (acc, item) => acc + item.quantity, 
+   0
+);

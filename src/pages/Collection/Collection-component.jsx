@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import CollectionItem from '../../components/CollectionItem/CollectionItem-component';
-import { connect } from 'react-redux'
-import { selectCollection } from '../../redux/shop/shop-selectors';
+import CollectionContexts from '../../contexts/collections/collections-context';
 import { CollectionPageContainer, 
          CollectionTitleContainer, 
          CollectionItemsContainer } from './Collection-styled';
 
-const CollectionPage = ({ collection }) => {
+// useContext method
+
+const CollectionPage = ({ match }) => {
+   const collections = useContext(CollectionContexts);
+   const collection = collections[match.params.collectionId]
    const {title, items} = collection;
 
    return (
@@ -20,8 +23,27 @@ const CollectionPage = ({ collection }) => {
    </CollectionPageContainer>
 );}
 
-const mapStateToProps = (state, ownProps) => ({
-   collection: selectCollection(ownProps.match.params.collectionId)(state)
-});
+// Traditional context component method
 
-export default connect(mapStateToProps)(CollectionPage);
+// const CollectionPage = ({ match }) => {
+//    return (
+//       <CollectionContexts.Consumer>
+//          { 
+//             collections => {
+//                const collection = collections[match.params.collectionId];
+//                const {title, items} = collection;
+//                return (
+//                   <CollectionPageContainer>
+//                      <CollectionTitleContainer>{ title }</CollectionTitleContainer>
+//                      <CollectionItemsContainer>
+//                         {
+//                            items.map(item => (<CollectionItem key={item.id} item={item} />))
+//                         }
+//                      </CollectionItemsContainer>
+//                   </CollectionPageContainer>
+//                );
+//          }}
+//       </CollectionContexts.Consumer>
+// );}
+
+export default CollectionPage;

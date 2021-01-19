@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect'
-import { selectCartItems } from '../../redux/cart/cart-selectors';
-import { toggleCartHidden } from '../../redux/cart/cart-actions';
 import { clickInElement } from './CartDropdown-util';
 import { CartDropdownContainer, 
          CartItemsContainer, 
          EmptyMessageContainer } from './CartDropdown-styled';
 import CustomBtn from '../CustomBtn/CustomBtn-component';
 import CartItem from '../CartItem/CartItem-component';
+import { CartContext } from '../../providers/cart/cart-provider';
 
 
-const CartDropdown = ({ cartItems, toggleCartHidden, history }) => {
+const CartDropdown = ({ history }) => {
+
+   const { toggleCartHidden, cartItems } = useContext(CartContext);
 
    useEffect(() => {
       // Hooks useEffect to close the cartDropdown if clicked outside of the dropdown
@@ -50,12 +49,4 @@ const CartDropdown = ({ cartItems, toggleCartHidden, history }) => {
    </CartDropdownContainer>
 )};
 
-const mapStateToProps = createStructuredSelector({
-   cartItems: selectCartItems
-});
-
-const mapDispatchToProps = dispatch => ({
-   toggleCartHidden: () => dispatch(toggleCartHidden())
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CartDropdown));
+export default withRouter(CartDropdown);

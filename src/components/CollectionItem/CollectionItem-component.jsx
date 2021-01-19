@@ -1,6 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { addItemToCart } from '../../redux/cart/cart-actions';
+import React, {useContext} from 'react';
+import { CartContext } from '../../providers/cart/cart-provider'
 import { 
    ItemImageContainer,
    ItemBtnContainer,
@@ -10,8 +9,9 @@ import {
    ItemPriceContainer 
 } from './CollectionItem-styled';
 
-const CollectionItem = ({ item, addItemToCart }) => {
-   const {name, price, imageUrl} = item;
+const CollectionItem = ({ item }) => {
+   const { name, price, imageUrl } = item;
+   const { addItem } = useContext(CartContext);
    
    return (
    <CollectionItemContainer>
@@ -20,14 +20,10 @@ const CollectionItem = ({ item, addItemToCart }) => {
          <ItemNameContainer>{name}</ItemNameContainer>
          <ItemPriceContainer>{price}</ItemPriceContainer>
       </CollectionFooterContainer>
-      <ItemBtnContainer onClick={() => addItemToCart(item)} inverted >
+      <ItemBtnContainer onClick={() => addItem(item)} inverted >
          Add to cart
       </ItemBtnContainer>
    </CollectionItemContainer>
 );}
 
-const mapDispatchToProps = dispatch => ({
-   addItemToCart: item => dispatch(addItemToCart(item))
-});
-
-export default connect(null, mapDispatchToProps)(CollectionItem);
+export default CollectionItem;
