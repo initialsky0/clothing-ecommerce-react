@@ -3,7 +3,8 @@ import { GET_CART_HIDDEN,
          GET_CART_ITEMS,
          GET_CART_TOTAL,
          GET_ITEM_COUNT,
-         GET_CURRENT_USER } from './queries';
+         GET_CURRENT_USER,
+         GET_DIRECTORY } from './queries';
 import { updateCartItem, 
          removeCartItem, 
          getCartItemCount,
@@ -27,6 +28,18 @@ export const typeDefs = gql`
       id: ID!
    }
 
+   extend type Directory {
+      section: [Section]!
+   }
+
+   extend type Section {
+      title: String!
+      imageUrl: String!
+      size: String
+      id: ID!
+      linkUrl: String!
+   }
+
    extend type Mutation {
       ToggleCartHidden: Boolean!
       AddItemToCart(item: Item!): [Item]!
@@ -34,6 +47,7 @@ export const typeDefs = gql`
       ClearItemFromCart(item: Item!): [Item]!
       EmptyCartItems: [Item]!
       UpdateCurrentUser(user: User!): User!
+      LoadDirectory(dirData: Directory!) : Directory!
    }
 `;
 
@@ -110,6 +124,14 @@ export const resolvers = {
             data: { currentUser: user }
          });
          return user;
+      },
+
+      loadDirectory: (_root, { dirData }, { cache }) => {
+         cache.writeQuery({
+            query: GET_DIRECTORY,
+            data: { directory: dirData }
+         });
+         return dirData;
       }
    }
 }

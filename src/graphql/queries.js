@@ -30,6 +30,11 @@ export const GET_CURRENT_USER = gql`
    }
 `;
 
+export const GET_DIRECTORY = gql`
+   {
+      directory @client
+   }
+`;
 
 // Mutation Queries
 export const TOGGLE_CART_HIDDEN = gql`
@@ -68,3 +73,8 @@ export const UPDATE_CURRENT_USER = gql`
    }
 `;
 
+export const LOAD_DIRECTORY = gql`
+   mutation LoadDirectory($dirData: Directory!) {
+      loadDirectory(dirData: $dirData) @client
+   }
+`;

@@ -31,10 +31,11 @@ const client = new ApolloClient({
 // Initial states
 client.writeData({
   data: {
-    cartHidden: true,
-    cartItems: [],
-    cartTotal: 0,
-    itemCount: 0,
+    directory: null, 
+    cartHidden: true, 
+    cartItems: [], 
+    cartTotal: 0, 
+    itemCount: 0, 
     currentUser: null
   }
 });
