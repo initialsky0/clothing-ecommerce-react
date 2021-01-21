@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { addItemToCart } from '../../redux/cart/cart-actions';
 import { 
    ItemImageContainer,
    ItemBtnContainer,
@@ -26,8 +24,5 @@ const CollectionItem = ({ item, addItemToCart }) => {
    </CollectionItemContainer>
 );}
 
-const mapDispatchToProps = dispatch => ({
-   addItemToCart: item => dispatch(addItemToCart(item))
-});
 
-export default connect(null, mapDispatchToProps)(CollectionItem);
+export default CollectionItem;

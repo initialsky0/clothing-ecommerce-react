@@ -7,14 +7,16 @@ import { setCurrentUser } from './redux/user/user-actions';
 import { createStructuredSelector } from 'reselect'
 import { selectCurrentUser } from './redux/user/user-selectors';
 
+// GraphQL
+import {default as Header} from './components/Header/Header-container';
+
 // Other Utilities
 import { Switch, Route, Redirect } from "react-router-dom";
 import { auth, createUserProfileDocument } from './firebase/firebase-util';
 import HomePage from './pages/HomePage/HomePage-component';
 import ShopPage from './pages/ShopPage/Shop-component';
 import UserForms from './pages/UserForms/UserForms-component';
-import CheckoutPage from './pages/Checkout/Checkout-component';
-import Header from './components/Header/Header-component';
+import { default as CheckoutPage } from './pages/Checkout/Checkout-container';
 // import { render } from '@testing-library/react';
 
 class App extends React.Component {

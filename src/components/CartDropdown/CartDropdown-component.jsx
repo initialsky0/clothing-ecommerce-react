@@ -1,9 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect'
-import { selectCartItems } from '../../redux/cart/cart-selectors';
-import { toggleCartHidden } from '../../redux/cart/cart-actions';
 import { clickInElement } from './CartDropdown-util';
 import { CartDropdownContainer, 
          CartItemsContainer, 
@@ -49,13 +45,4 @@ const CartDropdown = ({ cartItems, toggleCartHidden, history }) => {
       </CustomBtn>
    </CartDropdownContainer>
 )};
-
-const mapStateToProps = createStructuredSelector({
-   cartItems: selectCartItems
-});
-
-const mapDispatchToProps = dispatch => ({
-   toggleCartHidden: () => dispatch(toggleCartHidden())
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CartDropdown));
+export default withRouter(CartDropdown);

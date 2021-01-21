@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { auth } from '../../firebase/firebase-util';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user-selectors';
-import { selectCartHidden } from '../../redux/cart/cart-selectors';
 // Below is method to import svg in React
 import { ReactComponent as Logo } from '../../assets/crown.svg';
-import CartIcon from '../CartIcon/CartIcon-component';
-import CartDropdown from '../CartDropdown/CartDropdown-component';
+// etc.
+import { default as CartIcon } from '../CartIcon/CartIcon-container';
+import { default as CartDropdown } from '../CartDropdown/CartDropdown-container';
 import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from './Header-styled';
 
 const Header = ({ currentUser, hidden }) => (
@@ -36,8 +36,7 @@ const Header = ({ currentUser, hidden }) => (
 
 // Using selectors from reselect
 const mapStateToProps = createStructuredSelector ({
-   currentUser: selectCurrentUser,
-   hidden: selectCartHidden
+   currentUser: selectCurrentUser
 });
 
 export default connect(mapStateToProps)(Header);

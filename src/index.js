@@ -9,16 +9,63 @@ import { store, persistor } from './redux/store';
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 // import reportWebVitals from './reportWebVitals';
 
+// GraphQL libraries
+import { ApolloProvider } from 'react-apollo';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-boost';
+
+// GraphQL resolvers
+import { typeDefs, resolvers } from './graphql/resolvers';
+
+const httpLink =createHttpLink({
+  uri: 'https://crwn-clothing.com'
+});
+
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache,
+  typeDefs,
+  resolvers
+});
+
+client.writeData({
+  data: {
+    cartHidden: true,
+    cartItems: [],
+    cartTotal: 0,
+    itemCount: 0
+  }
+});
+
+// Example on requesting query from graphql
+// client.query({
+//   query: gql`
+//     {
+//       getCollectionsByTitle(title: "Hats") {
+//         items {
+//           id
+//           name
+//           price
+//           imageUrl
+//         }
+//       }
+//     }
+//   `
+// }).then(res => console.log(res));
+
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <PersistGate persistor={persistor}>
-        <React.StrictMode>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <PersistGate persistor={persistor}>
           <App />
-        </React.StrictMode>
-      </PersistGate>
-    </BrowserRouter>
-  </Provider>,
+        </PersistGate>
+      </BrowserRouter>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root')
 );
 
