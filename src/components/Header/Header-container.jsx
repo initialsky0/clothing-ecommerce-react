@@ -1,12 +1,31 @@
 import React from 'react';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import Header from './Header-component';
-import { GET_CART_HIDDEN } from '../../graphql/queries';
+import { GET_CART_HIDDEN, GET_CURRENT_USER, EMPTY_CART_ITEMS } from '../../graphql/queries';
 
+// Will be wrapped in another query for practice
 const HeaderContainer = () => (
    <Query query={GET_CART_HIDDEN}>
       {
-         ({ data: { cartHidden } }) => <Header hidden={cartHidden} />
+         ({ data: { cartHidden } }) => (
+            <Query query={GET_CURRENT_USER}>
+               {
+                  ({ data: { currentUser } }) => 
+                     (
+                        <Mutation mutation={EMPTY_CART_ITEMS}>
+                        {
+                           emptyCartItems => 
+                              <Header 
+                                 hidden={cartHidden} 
+                                 currentUser={currentUser} 
+                                 emptyCart={emptyCartItems}
+                              />
+                        }
+                        </Mutation>
+                     )
+               }       
+            </Query>
+         )
       }
    </Query>
 );

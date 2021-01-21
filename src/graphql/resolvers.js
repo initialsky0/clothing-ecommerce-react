@@ -2,7 +2,8 @@ import { gql } from 'apollo-boost';
 import { GET_CART_HIDDEN, 
          GET_CART_ITEMS,
          GET_CART_TOTAL,
-         GET_ITEM_COUNT } from './queries';
+         GET_ITEM_COUNT,
+         GET_CURRENT_USER } from './queries';
 import { updateCartItem, 
          removeCartItem, 
          getCartItemCount,
@@ -14,11 +15,25 @@ export const typeDefs = gql`
       quantity: Int
    }
 
+   extend type Date {
+      nanoseconds: Int!
+      seconds: Int!
+   }
+
+   extend type User {
+      createdDate: Date!
+      displayName: String!
+      email: String!
+      id: ID!
+   }
+
    extend type Mutation {
       ToggleCartHidden: Boolean!
       AddItemToCart(item: Item!): [Item]!
       RemoveItemFromCart(item: Item!): [Item]!
       ClearItemFromCart(item: Item!): [Item]!
+      EmptyCartItems: [Item]!
+      UpdateCurrentUser(user: User!): User!
    }
 `;
 
@@ -82,5 +97,19 @@ export const resolvers = {
          cacheCartItems(updatedCartItems, cache);
          return updatedCartItems;
       },
+
+      emptyCartItems: (_root, _args, { cache }) => {
+         const emptyCart = [];
+         cacheCartItems(emptyCart, cache);
+         return emptyCart;
+      },
+
+      updateCurrentUser: (_root, { user }, { cache }) => {
+         cache.writeQuery({
+            query: GET_CURRENT_USER,
+            data: { currentUser: user }
+         });
+         return user;
+      }
    }
 }

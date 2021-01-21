@@ -24,6 +24,12 @@ export const GET_ITEM_COUNT = gql`
    }
 `;
 
+export const GET_CURRENT_USER = gql`
+   {
+      currentUser @client
+   }
+`;
+
 
 // Mutation Queries
 export const TOGGLE_CART_HIDDEN = gql`
@@ -47,6 +53,18 @@ export const REMOVE_ITEM_FROM_CART = gql`
 export const CLEAR_ITEM_FROM_CART = gql`
    mutation ClearItemFromCart($item: Item!) {
       clearItemFromCart(item: $item) @client
+   }
+`;
+
+export const EMPTY_CART_ITEMS = gql`
+   mutation EmptyCartItems {
+      emptyCartItems @client
+   }
+`;
+
+export const UPDATE_CURRENT_USER = gql`
+   mutation UpdateCurrentUser($user: User!) {
+      updateCurrentUser(user: $user) @client
    }
 `;
 
