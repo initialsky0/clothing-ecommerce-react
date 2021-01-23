@@ -16,6 +16,13 @@ export const ItemBtnContainer = styled(CustomBtn)`
    position:  absolute;
    top: 255px;
    display: none;
+
+   @media only screen and (max-width: 800px) {
+      display: block;
+      min-width: unset;
+      opacity: .9;
+      padding: 0 10px;
+   }
 `;
 
 export const CollectionItemContainer = styled.div`
@@ -34,6 +41,20 @@ export const CollectionItemContainer = styled.div`
       ${ItemBtnContainer} {
          display: flex;
          opacity: .85;
+      }
+   }
+
+   @media only screen and (max-width: 800px) {
+      width: 40vw;
+
+      &:hover {
+         ${ItemImageContainer} {
+            opacity: unset;
+         }
+
+         ${ItemBtnContainer} {
+            opacity: unset;
+         }
       }
    }
 `;

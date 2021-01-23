@@ -6,6 +6,9 @@ export const BackgroundImgContainer = styled.div`
    background-image: url(${props => props.imageUrl});
    background-position: center;
    background-size: cover;
+   @media only screen and (max-width: 800px) {
+      background-position: top;
+   }
 `;
 
 export const ContentContainer = styled.div`
@@ -46,6 +49,10 @@ export const MenuItemContainer = styled.div`
 
       & ${ContentContainer} { opacity: .9; }
    }
+
+   @media only screen and (max-width: 800px) {
+      height: 350px;
+   }
 `;
 
 export const MenuItemTitleContainer = styled.h1`
@@ -53,6 +60,7 @@ export const MenuItemTitleContainer = styled.h1`
    margin-bottom: 6px;
    font-size: 22px;
    color: #4b4b4b;
+   text-transform: uppercase;
 `;
 
 export const MenuItemSubTitleContainer = styled.span`

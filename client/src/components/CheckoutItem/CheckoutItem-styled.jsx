@@ -32,10 +32,17 @@ export const SectionContainer = styled.span`
 export const QuantityContainer = styled.span`
    ${ItemWidth}
    display: flex;
+   @media only screen and (max-width: 800px) {
+      padding-left: 5px;
+   }
 `;
 
 export const ValueContainer = styled.span`
    margin: auto 10px;
+
+   @media only screen and (max-width: 800px) {
+      margin: auto 5px;
+   }
 `;
 
 export const ArrayContainer = styled.div`

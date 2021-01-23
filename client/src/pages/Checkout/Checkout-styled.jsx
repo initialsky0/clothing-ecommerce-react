@@ -9,6 +9,10 @@ export const CheckoutPageContainer = styled.div`
    margin: 50px auto 0;
 
    & > button { margin-left: auto; }
+
+   @media only screen and (max-width: 800px) {
+      width: 95%;
+   }
 `;
 
 export const CheckoutHeaderContainer = styled.div`
@@ -17,6 +21,10 @@ export const CheckoutHeaderContainer = styled.div`
    display: flex;
    justify-content: space-between;
    border-bottom: 1px solid darkgrey;
+
+   @media only screen and (max-width: 380px) {
+      font-size: 13px;
+   }
 `;
 
 export const HeaderBlockContainer = styled.div`
@@ -33,10 +41,18 @@ export const TotalPriceContainer = styled.div`
    margin-left: auto;
    font-size: 36px;
 
+   @media only screen and (max-width: 380px) {
+      font-size: 30px;
+   }
+
    &~${WarningTextContainer} {
       text-align: center;
       margin: 50px 0;
       font-size: 20px;
       color: red;
+
+      @media only screen and (max-width: 380px) {
+      font-size: 16px;
+   }
    }
 `;
