@@ -10,5 +10,6 @@ const CartItem = ({ item: { imageUrl, price, name, quantity } }) => (
       </ItemDetailsContainer>
    </CartItemContainer>
 );
-
+// memoize cartitems to reduce render for existing items when adding item when cart drop down is active
+// export default React.memo(CartItem);
 export default CartItem;
