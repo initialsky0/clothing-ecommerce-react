@@ -19,13 +19,14 @@ const port = process.env.PORT || 6000;
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// Enforce https for Heroku
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(cors());
-app.use(compression());
 
 if(process.env.NODE_ENV === 'production') {
+   // Enforce https for Heroku
+   app.use(enforce.HTTPS({ trustProtoHeader: true }));
+   app.use(compression());
    app.use(express.static(path.join(__dirname, 'client/build')));
+   
    app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
    });

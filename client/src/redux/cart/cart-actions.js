@@ -41,3 +41,16 @@ export const updateCartSignInStart = () => ({
 export const clearCart = () => ({
    type: cartActionTypes.CLEAR_CART
 });
+
+export const clearDBCartStart = () => ({
+   type: cartActionTypes.CLEAR_CART_REMOTE_START
+});
+
+export const clearDBCartSuccess = () => ({
+   type: cartActionTypes.CLEAR_CART_REMOTE_SUCCESS
+});
+
+export const clearDBCartFailed = error => ({
+   type: cartActionTypes.CLEAR_CART_REMOTE_FAILED,
+   payload: error
+});

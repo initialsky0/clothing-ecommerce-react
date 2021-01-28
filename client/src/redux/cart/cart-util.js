@@ -1,4 +1,4 @@
-import { firestore } from "../../firebase/firebase-util";
+import { firestore, auth } from "../../firebase/firebase-util";
 
 export const updateCartItem = (cartItems, cartItemToAdd) => {
    const cartItemExist = cartItems.find(
@@ -128,3 +128,15 @@ export const handleRemoteLocalCartItems = async (cartRef, localCartItems) => {
 export const clearCartItem = (cartItems, cartItemToClear) => (
    cartItems.filter(item => item.id !== cartItemToClear.id)
 );
+
+export const emptyCartItemsCollection = async () => {
+   const unsubscribe = auth.onAuthStateChanged(async userAuth => {
+     if(!userAuth) return;
+     const collectionRef = firestore.collection(`users/${userAuth.uid}/cartItems`);
+     const itemsDocSnapshot = await collectionRef.get();
+     const batch = firestore.batch();
+     itemsDocSnapshot.docs.forEach(itemSnapshot => batch.delete(itemSnapshot.ref));
+     return await batch.commit();
+   });
+   unsubscribe();
+ };

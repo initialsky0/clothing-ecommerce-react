@@ -2,7 +2,8 @@ import cartActionTypes from './cart-types';
 
 const INITIAL_STATE = {
    hidden: true,
-   cartItems: []
+   cartItems: [],
+   error: null
 };
 
 const cartReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +22,12 @@ const cartReducer = (state = INITIAL_STATE, action) => {
          return {
             ...state,
             cartItems: []
+         }
+      case cartActionTypes.UPDATE_CART_FAILED:
+      case cartActionTypes.CLEAR_CART_REMOTE_FAILED:
+         return {
+            ...state,
+            error: action.payload
          }
       default:
          return state

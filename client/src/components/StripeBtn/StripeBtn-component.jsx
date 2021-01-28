@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { clearDBCartStart } from '../../redux/cart/cart-actions';
 // import axios from 'axios';
 import StripeCheckout from 'react-stripe-checkout';
 
-const StripeCheckoutBtn = ({ price }) => {
+const StripeCheckoutBtn = ({ price, clearRemoteCart }) => {
    const priceInCent = price * 100;
    const publishableKey = process.env.REACT_APP_STRIPE_PUB_KEY;
 
@@ -31,7 +33,12 @@ const StripeCheckoutBtn = ({ price }) => {
             token
          })
       })
-      .then(response => alert('Payment successful'))
+      .then(response => {
+         if(response.ok) {
+            clearRemoteCart();
+            alert('Payment successful');
+         };
+      })
       .catch(error => {
          console.log('Payment error', JSON.parse(error));
          alert('An error occured during the transaction. Please ensure you provided the correct credit card info.')
@@ -54,4 +61,8 @@ const StripeCheckoutBtn = ({ price }) => {
    );
 };
 
-export default StripeCheckoutBtn;
+const mapDispatchToProps = dispatch => ({
+   clearRemoteCart: () => dispatch(clearDBCartStart())
+});
+
+export default connect(null, mapDispatchToProps)(StripeCheckoutBtn);

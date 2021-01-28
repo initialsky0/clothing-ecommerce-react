@@ -4,7 +4,8 @@ import { updateCartItem,
          removeCartItem, 
          clearCartItem,
          updateItemToDB, 
-         handleRemoteLocalCartItems } from './cart-util';
+         handleRemoteLocalCartItems, 
+         emptyCartItemsCollection } from './cart-util';
 import cartActionTypes from './cart-types' ;
 import userActionTypes from '../user/user-types';
 import { firestore,
@@ -12,7 +13,9 @@ import { firestore,
 import { clearCart,
          updateCartStart,
          updateCartSuccess,
-         updateCartFailed } from './cart-actions';
+         updateCartFailed, 
+         clearDBCartSuccess, 
+         clearDBCartFailed } from './cart-actions';
 
 export function* updateCartItemsToDB({ payload : { cartItems, item } }) {
    try {
@@ -85,13 +88,32 @@ export function* onSignInSuccess() {
    yield takeLatest(cartActionTypes.UPDATE_CART_ON_SIGN_IN_START, updateCartOnSignIn);
 }
 
-export function* clearCartOnSignOut() {
+export function* clearCartItems() {
    yield put(clearCart());
 };
 
-export function* onSignOutSuccess() {
-   yield takeLatest(userActionTypes.SIGNOUT_SUCCESS, clearCartOnSignOut);
+export function* onClearCartItems() {
+   yield takeLatest(
+      [
+         userActionTypes.SIGNOUT_SUCCESS, 
+         cartActionTypes.CLEAR_CART_REMOTE_SUCCESS
+      ], 
+      clearCartItems
+   );
 };
+
+export function* emptyRemoteCartStart() {
+   try {
+      yield call(emptyCartItemsCollection);
+      yield put(clearDBCartSuccess());
+   } catch (error) {
+      yield put(clearDBCartFailed(error));
+   }
+}
+
+export function* onEmptyRemoteCart() {
+   yield takeLatest(cartActionTypes.CLEAR_CART_REMOTE_START, emptyRemoteCartStart);
+}
 
 export function* cartSagas() {
    yield all([
@@ -100,6 +122,7 @@ export function* cartSagas() {
       call(onRemoveItem),
       call(onClearItem),
       call(onSignInSuccess),
-      call(onSignOutSuccess)
+      call(onClearCartItems),
+      call(onEmptyRemoteCart)
    ]);
 };
