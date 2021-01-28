@@ -4,12 +4,13 @@ import { signInSuccess,
          signUpSuccess, 
          actionFailed } from './user-actions';
 import { takeLatest, put, all, call } from 'redux-saga/effects';
+import { updateCartSignInStart } from '../cart/cart-actions';
 import { auth, 
          createUserProfileDocument, 
          googleProvider,
          getCurrentUser } from '../../firebase/firebase-util';
 
-export function* getSnapshotFromUserAuth(userAuth, additionalData) {
+export function* getSnapshotFromUserAuth(userAuth, manual = false, additionalData) {
    try{
       const userRef = yield call(createUserProfileDocument, userAuth, additionalData);
       const userSnapshot = yield userRef.get();
@@ -17,6 +18,8 @@ export function* getSnapshotFromUserAuth(userAuth, additionalData) {
          id: userSnapshot.id,
          ...userSnapshot.data()
       }));
+      // If user sign in manually, sync the cart with DB
+      if(manual) yield put(updateCartSignInStart());
    } catch(error) {
       yield put(actionFailed(error));
    }
@@ -25,7 +28,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalData) {
 export function* signInWithGoogle() {
    try {
       const { user } = yield auth.signInWithPopup(googleProvider);
-      yield getSnapshotFromUserAuth(user);
+      yield getSnapshotFromUserAuth(user, true);
    } catch(error) {
       yield put(actionFailed(error));
    }
@@ -38,7 +41,7 @@ export function* onGoogleSignInStart() {
 export function* signInWithEmail({payload: { email, password }}) {
    try {
       const { user } = yield auth.signInWithEmailAndPassword(email, password);
-      yield getSnapshotFromUserAuth(user);
+      yield getSnapshotFromUserAuth(user, true);
    } catch(error) {
       yield put(actionFailed(error));
    }
@@ -90,7 +93,7 @@ export function* onSignUpStart() {
 
 export function* signInAfterSignUp({payload: {user, additionalData}}) {
    try {
-      yield call(getSnapshotFromUserAuth, user, additionalData);
+      yield call(getSnapshotFromUserAuth, user, true, additionalData );
    } catch (error) {
       yield put(actionFailed(error));
    }

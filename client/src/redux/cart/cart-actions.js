@@ -34,6 +34,10 @@ export const updateCartFailed = error => ({
    payload: error
 });
 
+export const updateCartSignInStart = () => ({
+   type: cartActionTypes.UPDATE_CART_ON_SIGN_IN_START
+});
+
 export const clearCart = () => ({
    type: cartActionTypes.CLEAR_CART
 });

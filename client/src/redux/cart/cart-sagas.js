@@ -2,7 +2,9 @@ import { all, call, takeLatest, put, select } from 'redux-saga/effects';
 import { selectCartItems } from './cart-selectors';
 import { updateCartItem,
          removeCartItem, 
-         clearCartItem } from './cart-util';
+         clearCartItem,
+         updateItemToDB, 
+         handleRemoteLocalCartItems } from './cart-util';
 import cartActionTypes from './cart-types' ;
 import userActionTypes from '../user/user-types';
 import { firestore,
@@ -14,25 +16,16 @@ import { clearCart,
 
 export function* updateCartItemsToDB({ payload : { cartItems, item } }) {
    try {
-      // getting user auth for access, create userRef, and take snapshot
+      // getting user auth for access, create userCartItemsRef
       const userAuth =  yield getCurrentUser();
-      const userRef = yield firestore.doc(`users/${userAuth.uid}/cartItems/${item.id}`);
-      const snapshot = yield userRef.get();
-      // Create item in DB if doesn't exist
-      if(!snapshot.exists)  yield userRef.set({  ...item });
-      // getting item quantity for update
-      const quantityUpdate = yield cartItems.reduce((acc, cartItem) => 
-         (cartItem.id === item.id ? acc + cartItem.quantity : acc),
-         0
-      );
-      // Update quantity, if 0 delete the item from DB
-      if(quantityUpdate > 0) {
-         yield userRef.update({ quantity: quantityUpdate });
-      } else {
-         yield userRef.delete();
+      if(userAuth) {
+         const cartItemsRef = yield firestore.doc(`users/${userAuth.uid}/cartItems/${item.id}`);
+         // update item to DB
+         yield call(updateItemToDB, cartItemsRef, cartItems, item);
       }
       // Update success
       yield put(updateCartSuccess(cartItems));
+
    } catch (error) {
       yield put(updateCartFailed(error));
    }
@@ -72,6 +65,26 @@ export function* onClearItem() {
    yield takeLatest(cartActionTypes.CLEAR_ITEM_FROM_CART, clearItemToCart);
 }
 
+export function* updateCartOnSignIn() {
+   try {
+      // Local cartItems
+      const localCartItems = yield select(selectCartItems);
+      // Remote cartItems
+      const userAuth =  yield getCurrentUser();
+      const cartRef = yield firestore.collection(`users/${userAuth.uid}/cartItems`);
+      // Handle remote and local cartItems to update
+      const cartItems = yield call(handleRemoteLocalCartItems, cartRef, localCartItems);
+      // console.log(remoteCartItems.size);
+      yield put(updateCartSuccess(cartItems));
+   } catch (error) {
+      yield put(updateCartFailed(error));
+   }
+}
+
+export function* onSignInSuccess() {
+   yield takeLatest(cartActionTypes.UPDATE_CART_ON_SIGN_IN_START, updateCartOnSignIn);
+}
+
 export function* clearCartOnSignOut() {
    yield put(clearCart());
 };
@@ -86,6 +99,7 @@ export function* cartSagas() {
       call(onAddItem),
       call(onRemoveItem),
       call(onClearItem),
+      call(onSignInSuccess),
       call(onSignOutSuccess)
    ]);
 };
