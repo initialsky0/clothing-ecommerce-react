@@ -20,6 +20,19 @@ export const EmptCartConfContainer = styled.div`
       }
    }
 
+   @media only screen and (max-width: 380px) {
+      h2 {
+         margin: 0px 10px;
+         margin-top: 20px;
+         font-size: 20px;
+      }
+
+      p {
+         font-size: 15px;
+         margin-bottom: 20px;
+      }
+   }
+
 `;
 
 export const ConfirmBtnsContainer = styled.div`
@@ -37,6 +50,16 @@ export const ConfirmBtnsContainer = styled.div`
 
       ${CustomBtnContainer}:not(:last-child) {
          margin-bottom: 10px;
+      }
+   }
+
+   @media only screen and (max-width: 380px) {
+      ${CustomBtnContainer} {
+         font-size: 12px;
+         height: 30px;
+         min-width: 120px;
+         align-items: center;
+         border-radius: 5px;
       }
    }
 `;

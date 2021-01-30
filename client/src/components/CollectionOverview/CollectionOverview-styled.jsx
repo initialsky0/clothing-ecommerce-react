@@ -9,5 +9,6 @@ export const CollectionOverviewContainer = styled.div`
       width: 20%;
       min-width: 230px;
       align-self: center;
+      margin-bottom: 60px;
    }
 `;

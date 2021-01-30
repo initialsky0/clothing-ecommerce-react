@@ -4,6 +4,7 @@ import CustomBtn from '../CustomBtn/CustomBtn-component';
 export const ItemImageContainer = styled.div`
    width: 100%;
    height: 95%;
+   min-height: 360px;
    background-image: url("${props => props.imageUrl}");
    background-size: cover;
    background-position: center;

@@ -44,6 +44,11 @@ export const PopupContainerStyles = styled.div`
       width: 300px;
       height: 500px;
    }
+
+   @media only screen and (max-width: 380px) {
+      width: 280px;
+      height: 380px;
+   }
 `;
 
 export const CloseBtnContainer = styled.div`
