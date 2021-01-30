@@ -19,8 +19,11 @@ export const CollectPrevTitleContainer = styled.h1`
 export const CollectPrevItemsContainer = styled.div`
    display: flex;
    justify-content: space-between;
+   height: 40vh;
+   min-height: 450px;
+   
 
-   @media only screen and (max-width: 1000px) {
+   @media only screen and (max-width: 1100px) {
       & ${CollectionItemContainer}:not(:last-child) {
          margin-right: 5px;
       }
@@ -28,6 +31,8 @@ export const CollectPrevItemsContainer = styled.div`
 
    @media only screen and (max-width: 800px) {
       margin-right: unset;
+      height: unset;
+      min-height: unset;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;

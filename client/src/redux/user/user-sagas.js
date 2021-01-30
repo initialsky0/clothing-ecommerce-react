@@ -31,6 +31,7 @@ export function* signInWithGoogle() {
       yield getSnapshotFromUserAuth(user, true);
    } catch(error) {
       yield put(actionFailed(error));
+      yield alert('Login unsuccessful, please check your login credential and try again.');
    }
 };
 
@@ -44,6 +45,7 @@ export function* signInWithEmail({payload: { email, password }}) {
       yield getSnapshotFromUserAuth(user, true);
    } catch(error) {
       yield put(actionFailed(error));
+      yield alert('Login unsuccessful, please check your login credential and try again.');
    }
 };
 

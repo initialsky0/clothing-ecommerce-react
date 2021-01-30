@@ -1,16 +1,22 @@
 import React from 'react';
 import CheckoutItem from '../../components/CheckoutItem/CheckoutItem-component';
+import CustomBtn from '../../components/CustomBtn/CustomBtn-component';
+import EmptyCartConfirm from '../../components/EmptyCartConfirm/EmptyCartConfirm-component';
+import Popup from '../../components/Popup/Popup-component';
 import StripeCheckoutBtn from '../../components/StripeBtn/StripeBtn-component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCartItems, selectCartTotal } from '../../redux/cart/cart-selectors';
+import { selectEmptyCartPopup } from '../../redux/popup/popup-selectors';
+import { mountEmptyCartPopup, unmountEmptyCartPopup } from '../../redux/popup/popup-actions';
 import { CheckoutPageContainer,
          CheckoutHeaderContainer, 
          HeaderBlockContainer, 
          WarningTextContainer, 
-         TotalPriceContainer } from './Checkout-styled';
+         TotalPriceContainer,
+         ButtonsContainer } from './Checkout-styled';
 
-const CheckoutPage = ({cartItems, cartTotal}) => (
+const CheckoutPage = ({cartItems, cartTotal, emptyCartPopHidden, mountPopup, unmountPopup}) => (
    <CheckoutPageContainer> 
       <CheckoutHeaderContainer>
          <HeaderBlockContainer>
@@ -46,13 +52,28 @@ const CheckoutPage = ({cartItems, cartTotal}) => (
          <br/>
          Expire Date: Any future date
       </WarningTextContainer>
-      <StripeCheckoutBtn price={cartTotal} />
+      <ButtonsContainer>
+         <CustomBtn onClick={mountPopup} disabled={cartTotal ? false : true} >Empty Cart</CustomBtn>
+         <StripeCheckoutBtn price={cartTotal} />
+      </ButtonsContainer>
+      { emptyCartPopHidden 
+         ? null 
+         : <Popup callUnmount={unmountPopup} requireClose >
+               <EmptyCartConfirm />
+            </Popup> 
+      }
    </CheckoutPageContainer>
 );
 
 const mapStateToProps = createStructuredSelector({
    cartItems: selectCartItems,
-   cartTotal: selectCartTotal
+   cartTotal: selectCartTotal,
+   emptyCartPopHidden: selectEmptyCartPopup
 });
 
-export default connect(mapStateToProps)(CheckoutPage);
+const mapDispatchToProps = dispatch => ({
+   mountPopup: () => dispatch(mountEmptyCartPopup()),
+   unmountPopup: () => dispatch(unmountEmptyCartPopup())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutPage);

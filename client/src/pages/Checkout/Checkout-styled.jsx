@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {CustomBtnContainer} from '../../components/CustomBtn/CustomBtn-styled';
 
 export const CheckoutPageContainer = styled.div`
    width: 55%;
@@ -54,5 +55,20 @@ export const TotalPriceContainer = styled.div`
       @media only screen and (max-width: 380px) {
       font-size: 16px;
    }
+   }
+`;
+
+export const ButtonsContainer = styled.div`
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   width: 100%;
+
+   ${CustomBtnContainer} {
+      padding: 15px 12px;
+      height: 33px;
+      align-items: center;
+      min-width: unset;
+      border-radius: 5px;
    }
 `;

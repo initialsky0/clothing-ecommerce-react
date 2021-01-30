@@ -56,6 +56,22 @@ export const CustomBtnContainer = styled.button`
    display: flex;
    justify-content: center;
    cursor: pointer;
+   transition: background-color .15s;
+
+   &:focus {
+      outline: none;
+   }
+
+   &:disabled {
+      background-color: gray;
+      color: white;
+
+      &:hover {
+         background-color: gray;
+         color: white;
+         border: none;
+      }
+   }
 
    ${getBtnStyles}
 `;

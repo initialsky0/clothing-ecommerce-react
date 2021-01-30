@@ -14,8 +14,12 @@ export const ItemBtnContainer = styled(CustomBtn)`
    width: 80%;
    opacity: .7;
    position:  absolute;
-   top: 255px;
+   bottom: 45px;
    display: none;
+
+   @media only screen and (max-width: 1000px) {
+      min-width: 90%;
+   }
 
    @media only screen and (max-width: 800px) {
       display: block;
@@ -29,7 +33,8 @@ export const CollectionItemContainer = styled.div`
    width: 22vw;
    display: flex;
    flex-direction: column;
-   height: 350px;
+   height: auto;
+   min-height: 380px;
    align-items: center;
    position: relative;
 

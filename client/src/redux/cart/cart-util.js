@@ -62,67 +62,83 @@ export const getCartItemsFromDB = dbItemsSnapshots => (
 );
 
 export const updateItemsBatchToDB = async (cartRef, localCartItems) => {
-   // Update firebase DB with multiple cartItems
-   const batch = firestore.batch();
-   localCartItems.forEach(item => {
-      const newCartDocRef = cartRef.doc(`${item.id}`);
-      batch.set(newCartDocRef, item);
-   });
-   return await batch.commit();
+   try {
+      // Update firebase DB with multiple cartItems
+      const batch = firestore.batch();
+      localCartItems.forEach(item => {
+         const newCartDocRef = cartRef.doc(`${item.id}`);
+         batch.set(newCartDocRef, item);
+      });
+      return await batch.commit();
+   } catch (error) {
+      console.log(error);
+      throw error;
+   }
 }
 
 export const mergeLocalAndRemoteCartItems = async (cartRef, localCartItems, remoteCartItems) => {
    const batch = firestore.batch();
-   const cartItems = localCartItems.reduce((acc, item) => {
-      remoteCartItems.forEach(remoteItem => {
-         if(item.id === remoteItem.id) {
-            // When both item exist, update remote quantity then local
-            const quantitySum = item.quantity + remoteItem.quantity;
-            batch.update(
-               cartRef.doc(`${item.id}`), 
-               { quantity: quantitySum }
-            );
-            acc[item.id] = {
-               ...item,
-               quantity: quantitySum
-            };
-         } else if(!acc[remoteItem.id]) {
-            // Add remote item to the object set if it does not exist,
-            // this will ensure only one item will be added to the set, 
-            // else it would be updated before reaching here
-            acc[remoteItem.id] = remoteItem;
+   try {
+      const cartItems = localCartItems.reduce((acc, item) => {
+         remoteCartItems.forEach(remoteItem => {
+            if(item.id === remoteItem.id) {
+               // When both item exist, update remote quantity then local
+               const quantitySum = item.quantity + remoteItem.quantity;
+               batch.update(
+                  cartRef.doc(`${item.id}`), 
+                  { quantity: quantitySum }
+               );
+               acc[item.id] = {
+                  ...item,
+                  quantity: quantitySum
+               };
+            } else if(!acc[remoteItem.id]) {
+               // Add remote item to the object set if it does not exist,
+               // this will ensure only one item will be added to the set, 
+               // else it would be updated before reaching here
+               acc[remoteItem.id] = remoteItem;
+            }
+         });
+         if(!acc[item.id]) {
+            // The item is not in remote cartItems, will be added to the set
+            acc[item.id] = item;
+            // Update new item to remote cartItems
+            batch.set(cartRef.doc(`${item.id}`), item);
          }
-      });
-      if(!acc[item.id]) {
-         // The item is not in remote cartItems, will be added to the set
-         acc[item.id] = item;
-         // Update new item to remote cartItems
-         batch.set(cartRef.doc(`${item.id}`), item);
-      }
-      return acc
-   }, {}
-   );
-   await batch.commit();
-   return cartItems;
+         return acc
+      }, {}
+      );
+      await batch.commit();
+      return cartItems;
+   } catch (error) {
+      console.log(error);
+      throw error;
+   }
 }
 
 export const handleRemoteLocalCartItems = async (cartRef, localCartItems) => {
-   // Obtain snapshot for items with quantity greater than 0
-   const remoteSnapshots = await cartRef.where('quantity', '>', 0).get();
-   if(localCartItems.length && remoteSnapshots.size) {
-      // When both cartItems exist, merge both list
-      const remoteCartItems = getCartItemsFromDB(remoteSnapshots);
-      const cartItems = await mergeLocalAndRemoteCartItems(cartRef, localCartItems, remoteCartItems);
-      // return the list of items
-      return Object.values(cartItems);
-   } else if(remoteSnapshots.size) {
-      // Return remote cartItems when only remote cartItems exists
-      return getCartItemsFromDB(remoteSnapshots);
-   } else if(localCartItems.length) {
-      // Update remote cartItems when only local cartItems exists
-      updateItemsBatchToDB(cartRef, localCartItems);
+
+   try {
+      // Obtain snapshot for items with quantity greater than 0
+      const remoteSnapshots = await cartRef.where('quantity', '>', 0).get();
+      if(localCartItems.length && remoteSnapshots.size) {
+         // When both cartItems exist, merge both list
+         const remoteCartItems = getCartItemsFromDB(remoteSnapshots);
+         const cartItems = await mergeLocalAndRemoteCartItems(cartRef, localCartItems, remoteCartItems);
+         // return the list of items
+         return Object.values(cartItems);
+      } else if(remoteSnapshots.size) {
+         // Return remote cartItems when only remote cartItems exists
+         return getCartItemsFromDB(remoteSnapshots);
+      } else if(localCartItems.length) {
+         // Update remote cartItems when only local cartItems exists
+         updateItemsBatchToDB(cartRef, localCartItems);
+      }
+      return localCartItems;
+   } catch (error) {
+      console.log(error);
+      throw error;
    }
-   return localCartItems;
 }
 
 export const clearCartItem = (cartItems, cartItemToClear) => (
@@ -130,13 +146,18 @@ export const clearCartItem = (cartItems, cartItemToClear) => (
 );
 
 export const emptyCartItemsCollection = async () => {
-   const unsubscribe = auth.onAuthStateChanged(async userAuth => {
-     if(!userAuth) return;
-     const collectionRef = firestore.collection(`users/${userAuth.uid}/cartItems`);
-     const itemsDocSnapshot = await collectionRef.get();
-     const batch = firestore.batch();
-     itemsDocSnapshot.docs.forEach(itemSnapshot => batch.delete(itemSnapshot.ref));
-     return await batch.commit();
-   });
-   unsubscribe();
+   try {
+      const unsubscribe = auth.onAuthStateChanged(async userAuth => {
+         if(!userAuth) return;
+         const collectionRef = firestore.collection(`users/${userAuth.uid}/cartItems`);
+         const itemsDocSnapshot = await collectionRef.get();
+         const batch = firestore.batch();
+         itemsDocSnapshot.docs.forEach(itemSnapshot => batch.delete(itemSnapshot.ref));
+         return await batch.commit();
+       });
+       unsubscribe();
+   } catch (error) {
+      console.log(error);
+      throw error;
+   }
  };

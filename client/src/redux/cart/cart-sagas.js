@@ -39,9 +39,13 @@ export function* onUpdateCartItemsStart() {
 }
 
 export function* addItemToCart({ payload }) {
-   const cartItems = yield select(selectCartItems);
-   const newCartItems = yield updateCartItem(cartItems, payload);
-   yield put(updateCartStart(newCartItems, payload));
+   try{
+      const cartItems = yield select(selectCartItems);
+      const newCartItems = yield updateCartItem(cartItems, payload);
+      yield put(updateCartStart(newCartItems, payload));
+   } catch (error) {
+      yield put(updateCartFailed(error));
+   }
 }
 
 export function* onAddItem() {
@@ -49,9 +53,13 @@ export function* onAddItem() {
 }
 
 export function* removeItemToCart({ payload }) {
-   const cartItems = yield select(selectCartItems);
-   const newCartItems = yield removeCartItem(cartItems, payload);
-   yield put(updateCartStart(newCartItems, payload));
+   try {
+      const cartItems = yield select(selectCartItems);
+      const newCartItems = yield removeCartItem(cartItems, payload);
+      yield put(updateCartStart(newCartItems, payload));
+   } catch (error) {
+      yield put(updateCartFailed(error));
+   }
 }
 
 export function* onRemoveItem() {
@@ -59,9 +67,13 @@ export function* onRemoveItem() {
 }
 
 export function* clearItemToCart({ payload }) {
-   const cartItems = yield select(selectCartItems);
-   const newCartItems = yield clearCartItem(cartItems, payload);
-   yield put(updateCartStart(newCartItems, payload));
+   try {
+      const cartItems = yield select(selectCartItems);
+      const newCartItems = yield clearCartItem(cartItems, payload);
+      yield put(updateCartStart(newCartItems, payload));
+   } catch (error) {
+      yield put(updateCartFailed(error));
+   }
 }
 
 export function* onClearItem() {
