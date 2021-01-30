@@ -41,13 +41,8 @@ export const PopupContainerStyles = styled.div`
    ${({ animateStart }) => animateStart ? animatePopupMount : animatePopupUnmount }
 
    @media only screen and (max-width: 800px) {
-      width: 300px;
-      height: 500px;
-   }
-
-   @media only screen and (max-width: 380px) {
-      width: 280px;
-      height: 380px;
+      width: 90%;
+      height: 70%;
    }
 `;
 

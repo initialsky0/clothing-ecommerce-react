@@ -28,8 +28,8 @@ export const EmptCartConfContainer = styled.div`
       }
 
       p {
-         font-size: 15px;
-         margin-bottom: 20px;
+         font-size: 16px;
+         margin-bottom: 10px;
       }
    }
 
@@ -41,19 +41,13 @@ export const ConfirmBtnsContainer = styled.div`
    align-items: center;
    justify-content: space-evenly;
 
-   @media only screen and (max-width: 800px) {
+   @media only screen and (max-width: 380px) {
       flex-direction: column;
-
-      ${CustomBtnContainer} {
-         padding: 0 5px;
-      }
 
       ${CustomBtnContainer}:not(:last-child) {
          margin-bottom: 10px;
       }
-   }
 
-   @media only screen and (max-width: 380px) {
       ${CustomBtnContainer} {
          font-size: 12px;
          height: 30px;

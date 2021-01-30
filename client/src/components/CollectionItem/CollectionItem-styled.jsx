@@ -15,7 +15,7 @@ export const ItemBtnContainer = styled(CustomBtn)`
    width: 80%;
    opacity: .7;
    position:  absolute;
-   bottom: 45px;
+   bottom: 10%;
    display: none;
 
    @media only screen and (max-width: 1000px) {
