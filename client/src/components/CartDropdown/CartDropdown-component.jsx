@@ -12,24 +12,24 @@ import CustomBtn from '../CustomBtn/CustomBtn-component';
 import CartItem from '../CartItem/CartItem-component';
 
 
-const CartDropdown = ({ cartItems, toggleCartHidden, history }) => {
+const CartDropdown = ({ cartItems, toggleCartHidden, history, iconRef }) => {
+   //  Practice using ref, this works because CartDropdownContainer is basically a <div>
+   const dropdownRef = React.createRef();
 
    useEffect(() => {
       // Hooks useEffect to close the cartDropdown if clicked outside of the dropdown
       const closeDropdown = event => {
-         const selectIcon = document.getElementById('cart-icon');
-         const selectDropdown = document.getElementById('cart-dropdown');
-         if(!clickInElement(selectDropdown, event) && !clickInElement(selectIcon, event)) {
+         if(!clickInElement(dropdownRef.current, event) && !clickInElement(iconRef.current, event)) {
             toggleCartHidden();
          }
       }
       document.addEventListener('mousedown', closeDropdown);
 
       return () => document.removeEventListener('mousedown', closeDropdown);
-   }, [toggleCartHidden]);
+   }, [toggleCartHidden, dropdownRef, iconRef]);
 
    return (
-   <CartDropdownContainer id='cart-dropdown'>
+   <CartDropdownContainer ref={dropdownRef} >
       <CartItemsContainer>
          {
             cartItems.length 

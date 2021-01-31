@@ -9,12 +9,17 @@ import { CartIconContainer,
          ItemCountContainer } from './CartIcon-styled';
 
 
-const CartIcon = ({ toggleCartHidden, itemCount }) => (
-   <CartIconContainer id='cart-icon' onClick={toggleCartHidden}>
-      <ShoppingIconContainer />
-      <ItemCountContainer>{itemCount}</ItemCountContainer>
-   </CartIconContainer>
-)
+class CartIcon extends React.Component {
+   render() {
+      const { toggleCartHidden, itemCount, iconRef } = this.props;
+      return (
+         <CartIconContainer ref={iconRef} onClick={toggleCartHidden}>
+            <ShoppingIconContainer />
+            <ItemCountContainer>{itemCount}</ItemCountContainer>
+         </CartIconContainer>
+      );
+   }
+}
 
 const mapDispatchToProps = dispatch => ({
    toggleCartHidden: () => dispatch(toggleCartHidden())
@@ -24,4 +29,4 @@ const mapStateToProps = createStructuredSelector({
    itemCount: selectCartItemsCount
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartIcon);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(CartIcon);

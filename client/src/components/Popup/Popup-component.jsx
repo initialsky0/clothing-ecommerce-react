@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PopupOverlayStyles, 
          PopupContainerStyles, 
          CloseBtnContainer,
@@ -7,14 +7,18 @@ import { PopupOverlayStyles,
 const Popup = ({ children, callUnmount, requireClose }) => {
    const [ animateState, setAnimateState ] = useState(true);
 
+   useEffect(() => {
+      setAnimateState(true);
+   }, [setAnimateState]);
+
    const unmountPopup = () => {
       setAnimateState(false);
-      document.addEventListener('animationend', () => {
-            setAnimateState(true);
-            callUnmount();
-         }, { once: true }
+      document.addEventListener(
+         'animationend', 
+         callUnmount, 
+         { once: true }
       );
-   }
+   };
 
    const createChildrenWithProps = (children, propsToPass) => React.Children.map(
       children, 
