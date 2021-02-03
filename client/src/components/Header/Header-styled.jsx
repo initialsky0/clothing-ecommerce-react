@@ -1,16 +1,24 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 // const OptionContainerStyles = css`
 //    padding: 10px 15px;
 //    cursor: pointer;
 // `;
 
-export const HeaderContainer = styled.div`
+const headerFixedStyles = css`
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 10;
+   background: white;
+   height: 80px;
+   padding: 0 60px;
+`;
+
+const headerContainerStyles = css`
    height: 70px;
    width: 100%;
-   display: flex;
-   justify-content: space-between;
    margin-bottom: 25px;
 
    @media only screen and (max-width: 800px) {
@@ -20,14 +28,56 @@ export const HeaderContainer = styled.div`
    }
 `;
 
+const headerAnimationDown = css`
+   @keyframes dropdownHeader {
+      from{
+         transform: translateY(-100%);
+      }
+      to{
+         transform: translateY(0);
+      }
+   }
+
+   animation: dropdownHeader .5s forwards
+`;
+
+const headerAnimationUp = css`
+   @keyframes slideUpHeader {
+      from{
+         transform: translateY(0);
+      }
+      to{
+         transform: translateY(-100%);
+      }
+   }
+
+   animation: slideUpHeader .5s forwards
+`;
+
+export const HeaderContainer = styled.div`
+   display: flex;
+   justify-content: space-between;
+   ${headerContainerStyles};
+   ${({headerFixed}) => (headerFixed ? headerFixedStyles : null)};
+   ${({headerHidden}) => headerHidden ? headerAnimationUp : headerAnimationDown};
+   
+`;
+
+export const HeaderPlaceholder = styled.div`
+   display: ${({headerFixed}) => (headerFixed ? 'block' : 'none')};
+   ${headerContainerStyles};
+`;
+
 export const LogoContainer = styled(Link)`
    height: 100%;
    width: 70px;
-   padding: 25px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 
    @media only screen and (max-width: 800px) {
+      padding: 5px;
       width: 50px;
-      padding: 0;
    }
 `;
 
