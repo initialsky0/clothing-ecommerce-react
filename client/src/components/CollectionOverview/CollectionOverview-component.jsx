@@ -1,42 +1,22 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import CollectionPreview from '../CollectionPreview/CollectionPreview-component';
 import CustomBtn from '../CustomBtn/CustomBtn-component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCollectionsPreview } from '../../redux/shop/shop-selectors';
-import { selectHeaderHidden } from '../../redux/header/header-selectors';
+import { selectHeaderHidden, selectHeaderFixed } from '../../redux/header/header-selectors';
+import { selectCartItemsCount } from '../../redux/cart/cart-selectors';
 import { CollectionOverviewContainer } from './CollectionOverview-styled';
 import { toggleHeaderFixed, setHeaderHidden, setHeaderShow } from '../../redux/header/header-actions';
-import { checkScrollable, initScrollState } from '../../scroll-utils';
+import { useInitCollections } from '../../pages/Collection/Collection-utils';
+import { useScrollEffect } from '../../scroll-utils';
 
-const CollectionOverview = ({collections, history, toggleFixedHeader, 
-                             headerHidden, hideHeader, showHeader}) => {
-   
-   useEffect(() => {
-      toggleFixedHeader();
-      return toggleFixedHeader;
-   }, [toggleFixedHeader]);
+const CollectionOverview = (
+   { collections, history, toggleFixedHeader, 
+      headerHidden, hideHeader, showHeader, itemCount, headerFixed }) => {
 
-   useEffect(() => {
-      // Setup scroll control
-      const getScrollState = initScrollState();
-      const scrollHandler = () => {
-         if(window.pageYOffset === 0 && headerHidden) {
-            showHeader();
-            return;
-         }
-         const scrollState = getScrollState();
-         if(scrollState > 0 && !headerHidden) {
-            hideHeader();
-         } else if(scrollState < 0 && headerHidden) {
-            showHeader();
-         }
-      };
-
-      // Effect
-      checkScrollable(scrollHandler, true);
-      return () => checkScrollable(scrollHandler);
-   }, [headerHidden, hideHeader, showHeader]);
+   useInitCollections(toggleFixedHeader, showHeader, headerFixed, headerHidden, itemCount);
+   useScrollEffect(headerHidden, showHeader, hideHeader);
 
    return (
       <CollectionOverviewContainer>
@@ -60,7 +40,9 @@ const CollectionOverview = ({collections, history, toggleFixedHeader,
 
 const mapStateToProps = createStructuredSelector({
    collections: selectCollectionsPreview,
-   headerHidden: selectHeaderHidden
+   headerFixed: selectHeaderFixed,
+   headerHidden: selectHeaderHidden,
+   itemCount: selectCartItemsCount
 });
 
 const mapDispatchToProps = dispatch => ({

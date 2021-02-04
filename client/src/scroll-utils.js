@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 // Have to use addEventListener because the scrolling is on document, not on the component.
 
 /* 
@@ -12,14 +14,15 @@
    const maxScrollOffsetY = document.body.scrollHeight - window.innerHeight
 */
 
-export const checkScrollable = (scrollHandler, mount, offset = 0) => {
+export const checkScrollable = (scrollHandler, mount, force, offset = 0) => {
    // Add scroll eventlistener if page is scrollable and mount is true 
    // Remove any scroll eventlistener with scrollHandler if page is not scrollable, or mount is false
-   if(document.body.scrollHeight > window.innerHeight + offset && mount) {
-      console.log('initiate scroll event listener');
+   // force will enforce scroll listener disregard any condition
+   if((document.body.scrollHeight > window.innerHeight + offset && mount) || force) {
+      // console.log('initiate scroll event listener');
       document.addEventListener('scroll', scrollHandler);
    } else {
-      console.log('unmount');
+      // console.log('unmount');
       document.removeEventListener('scroll', scrollHandler);
    }
 };
@@ -80,4 +83,30 @@ export const initScrollDelay = (threshold = 0) => {
          }, delay);
       }
    }
+}
+
+// Custom Hook effect used for sticky header in shopPage collections
+export const useScrollEffect = (headerHidden, showHeader, hideHeader) => {
+
+   useEffect(() => {
+      // Setup scroll control
+      const getScrollState = initScrollState();
+      const scrollHandler = () => {
+         if(window.pageYOffset === 0 && headerHidden) {
+            showHeader();
+            return;
+         }
+         const scrollState = getScrollState();
+         if(scrollState > 0 && !headerHidden) {
+            hideHeader();
+            return;
+         } else if(scrollState < 0 && headerHidden) {
+            showHeader();
+         }
+      };
+
+      // Effect
+      checkScrollable(scrollHandler, true, true);
+      return () => checkScrollable(scrollHandler);
+   }, [headerHidden, hideHeader, showHeader]);
 }

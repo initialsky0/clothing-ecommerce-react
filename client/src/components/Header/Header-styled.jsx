@@ -32,13 +32,14 @@ const headerAnimationDown = css`
    @keyframes dropdownHeader {
       from{
          transform: translateY(-100%);
+         display: flex;
       }
       to{
          transform: translateY(0);
       }
    }
 
-   animation: dropdownHeader .5s forwards
+   animation: dropdownHeader .3s forwards;
 `;
 
 const headerAnimationUp = css`
@@ -48,13 +49,16 @@ const headerAnimationUp = css`
       }
       to{
          transform: translateY(-100%);
+         display: none;
       }
    }
 
-   animation: slideUpHeader .5s forwards
+   animation: slideUpHeader .3s forwards;
 `;
 
 export const HeaderContainer = styled.div`
+   position: relative;
+   z-index: 1;
    display: flex;
    justify-content: space-between;
    ${headerContainerStyles};
