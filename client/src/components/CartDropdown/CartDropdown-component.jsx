@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect'
 import { selectCartItems } from '../../redux/cart/cart-selectors';
 import { toggleCartHidden } from '../../redux/cart/cart-actions';
-import { clickInElement } from './CartDropdown-util';
+import { clickOutsideComponent } from './CartDropdown-util';
 import { CartDropdownContainer, 
          CartItemsContainer, 
          EmptyMessageContainer } from './CartDropdown-styled';
@@ -19,7 +19,7 @@ const CartDropdown = ({ cartItems, toggleCartHidden, history, iconRef }) => {
    useEffect(() => {
       // Hooks useEffect to close the cartDropdown if clicked outside of the dropdown
       const closeDropdown = event => {
-         if(!clickInElement(dropdownRef.current, event) && !clickInElement(iconRef.current, event)) {
+         if(clickOutsideComponent(dropdownRef, event) && clickOutsideComponent(iconRef, event)) {
             toggleCartHidden();
          }
       }
